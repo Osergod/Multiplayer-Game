@@ -1,11 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using FishNet.Connection;
-using FishNet.Object;
 
 // Player Controller
-public class PlayerController : NetworkBehaviour
+public class PlayerController : MonoBehaviour
 {
     [Header("Base Setup")]
     public float walkingSpeed = 6.0f;
@@ -24,24 +20,10 @@ public class PlayerController : NetworkBehaviour
 
     [SerializeField]
     private float cameraYOffset = 0.4f;
-    private Camera playerCamera;
 
+    [HideInInspector]
+    public Camera playerCamera;
 
-    public override void OnStartClient()
-    {
-        base.OnStartClient();
-        if (base.IsOwner)
-        {
-            playerCamera = Camera.main;
-            playerCamera.transform.position = new Vector3(transform.position.x, transform.position.y + cameraYOffset, transform.position.z);
-            playerCamera.transform.SetParent(transform);
-        }
-        else
-        {
-            gameObject.GetComponent<PlayerController>().enabled = false;
-        }
-    }
-    
     void Start()
     {
         characterController = GetComponent<CharacterController>();
@@ -92,5 +74,12 @@ public class PlayerController : NetworkBehaviour
             playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
             transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
         }
+    }
+
+    public void SetupCamera()
+    {
+        playerCamera = Camera.main;
+        playerCamera.transform.position = new Vector3(transform.position.x, transform.position.y + cameraYOffset, transform.position.z);
+        playerCamera.transform.SetParent(transform);
     }
 }
