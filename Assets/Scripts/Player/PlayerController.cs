@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     float rotationX = 0;
 
     [HideInInspector]
-    public bool canMove = true;
+    public bool canMove = false; // Desactivado por defecto en el Lobby
 
     [SerializeField]
     private float cameraYOffset = 0.4f;
@@ -28,7 +28,14 @@ public class PlayerController : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
 
-        // Look cursor
+        // En el lobby queremos el cursor libre y visible para interactuar con la UI
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
+    public void EnableGameplay()
+    {
+        canMove = true;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
